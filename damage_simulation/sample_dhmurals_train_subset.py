@@ -7,7 +7,7 @@ import shutil
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def parse_args() -> argparse.Namespace:
@@ -20,13 +20,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--source",
         type=Path,
-        default=PROJECT_ROOT / "dataset" / "DhMurals-inpainting-dataset" / "train",
+        default=REPO_ROOT / "dataset" / "DhMurals-inpainting-dataset" / "train",
         help="Source train directory.",
     )
     parser.add_argument(
         "--target",
         type=Path,
-        default=PROJECT_ROOT / "dataset" / "DhMurals-inpainting-dataset" / "train_sub",
+        default=REPO_ROOT / "dataset" / "DhMurals-inpainting-dataset" / "train_sub",
         help="Target train_sub directory.",
     )
     parser.add_argument(

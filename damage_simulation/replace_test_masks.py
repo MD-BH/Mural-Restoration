@@ -10,9 +10,9 @@ from PIL import Image
 
 
 SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
-PROJECT_ROOT = Path(__file__).resolve().parent
-DEFAULT_SOURCE_DIR = PROJECT_ROOT / "dataset" / "VAE_generated_masks"
-DEFAULT_TARGET_DIR = PROJECT_ROOT / "dataset" / "DhMurals-inpainting-dataset" / "train_sub" / "masks"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_SOURCE_DIR = REPO_ROOT / "dataset" / "VAE_generated_masks"
+DEFAULT_TARGET_DIR = REPO_ROOT / "dataset" / "DhMurals-inpainting-dataset" / "train_sub" / "masks"
 
 
 def list_image_files(directory: Path) -> List[Path]:

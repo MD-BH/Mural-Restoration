@@ -1,65 +1,70 @@
 # Mural-Restoration
 
-Utilities for synthetic mural-damage generation, mask preparation, and DhMurals-style dataset curation.
+Workspace for mural damage simulation, mask generation experiments, and optional intrinsic-editing side projects.
 
 ## Overview
 
-This repository centers on a reusable mural damage simulator plus a small set of helper scripts and notebooks:
+The main tracked part of this repository focuses on synthetic mural-damage generation and dataset preparation:
 
-- `mural_damage_simulator.py`: core library for loading mural images and masks, synthesizing damage textures, and exporting batch results with metadata.
-- `replace_test_masks.py`: samples masks from `dataset/VAE_generated_masks` and overwrites the paired filenames in `dataset/DhMurals-inpainting-dataset/train_sub/masks`.
-- `sample_dhmurals_train_subset.py`: creates a reproducible subset from the DhMurals training split while preserving directory structure.
-- `demo.ipynb`: interactive notebook for single-image testing, multi-mode comparison, and DhMurals batch experiments.
-- `VAE_learn_mask.ipynb`: notebook for training a VAE on mask data and generating synthetic masks.
+- `damage_simulation/`: the reusable mural damage simulator, dataset helper scripts, and an interactive demo notebook.
+- `VAE_learn_mask.ipynb`: an experimental notebook for training a VAE on mask data and generating synthetic masks.
+- `dataset/`: large local datasets used by the scripts and notebooks. This directory stays local and is not pushed to GitHub.
+- `rgbx/`: a separate local side project for RGB-to-intrinsic style processing. It is treated as its own project and environment.
+- `intrinsic_edit/`: a separate local side project for intrinsic editing. It is also managed with its own environment.
 
-The large `dataset/` directory is intentionally ignored by Git, so the repository stays lightweight while still documenting the expected local layout.
+To keep the main repository lightweight and reproducible, `dataset/`, `rgbx/`, and `intrinsic_edit/` are not tracked here as regular source content.
 
 ## Damage Modes
 
-The simulator currently supports three damage styles:
+The damage simulator currently supports three damage styles:
 
 - `base_fill`
 - `rough_plaster`
 - `powdered_loss`
 
-`apply_damage(...)` returns both the synthesized image and per-sample metadata such as base color, alpha map, texture noise, and sampling parameters. `batch_apply_damage(...)` writes output images plus `metadata.json` and `metadata.csv`.
+`damage_simulation/mural_damage_simulator.py` exposes `apply_damage(...)` and `batch_apply_damage(...)` for generating damaged murals and saving metadata such as base color, alpha masks, texture noise, and sampling parameters.
 
-## Expected Local Structure
+## Project Structure
 
-The code assumes a local directory layout similar to:
+The workspace is organized at a high level like this:
 
 ```text
-dataset/
-├── DhMurals-inpainting-dataset/
-│   ├── train/
-│   ├── train_sub/
-│   └── test/
-├── MuralDH/
-│   ├── Mural512/
-│   ├── Mural_SR/
-│   └── Mural_seg/
-├── VAE_generated_masks/
-└── decomp_test/
-    ├── albedo/
-    ├── mask/
-    └── ...
+.
+├── damage_simulation/
+├── VAE_learn_mask.ipynb
+├── dataset/
+├── rgbx/
+└── intrinsic_edit/
 ```
 
-Because `dataset/` is gitignored, these assets stay local and are not pushed to GitHub.
+The internal structures of `rgbx/` and `intrinsic_edit/` are intentionally omitted here because they are maintained as separate side projects.
 
 ## Installation
 
-Create an environment and install the libraries used by the scripts and notebooks:
+For the tracked damage-simulation workflow, create an environment and install the libraries used by the scripts and notebooks:
 
 ```bash
 pip install numpy opencv-python matplotlib pillow torch torchvision tqdm jupyter ipywidgets
 ```
 
+The side projects use their own environments:
+
+- `rgbx/` should be installed with the environment definition shipped inside that project.
+- `intrinsic_edit/` should be installed with the environment definition shipped inside that project.
+
 ## Quick Start
 
-Use the simulator as a Python module:
+The quickest way to explore the main workflow is the demo notebook:
 
-```python
+```bash
+jupyter notebook damage_simulation/demo.ipynb
+```
+
+If you want to call the simulator from Python, run from inside `damage_simulation/`:
+
+```bash
+cd damage_simulation
+python - <<'PY'
 from mural_damage_simulator import apply_damage, load_image, load_mask
 
 image = load_image("path/to/albedo.png")
@@ -74,20 +79,8 @@ result, metadata = apply_damage(
     edge_sharpness=0.75,
     seed=42,
 )
-```
-
-For batch synthesis:
-
-```python
-from mural_damage_simulator import batch_apply_damage
-
-records = batch_apply_damage(
-    images_dir="dataset/decomp_test/albedo",
-    masks_dir="dataset/decomp_test/mask",
-    output_dir="outputs/demo_batch",
-    n_samples_per_image=3,
-    seed=42,
-)
+print(metadata["damage_type"], metadata["nonzero_mask_pixels"])
+PY
 ```
 
 ## Utility Scripts
@@ -95,17 +88,17 @@ records = batch_apply_damage(
 Sample a reproducible DhMurals subset:
 
 ```bash
-python sample_dhmurals_train_subset.py --num-samples 1000 --overwrite
+python damage_simulation/sample_dhmurals_train_subset.py --num-samples 1000 --overwrite
 ```
 
 Replace subset masks with non-repeating VAE-generated masks:
 
 ```bash
-python replace_test_masks.py --seed 42
+python damage_simulation/replace_test_masks.py --seed 42
 ```
 
 ## Notes
 
-- The helper scripts now resolve default paths relative to the repository root, so they can be run after cloning without editing absolute local paths.
-- `demo.ipynb` is the best entry point for visually inspecting the three damage modes on example murals.
-- `VAE_learn_mask.ipynb` contains the experimental mask-generation workflow used to produce the `VAE_generated_masks` directory.
+- The helper scripts resolve their default dataset paths relative to the repository root.
+- `VAE_learn_mask.ipynb` contains the mask-generation experiment that complements the main damage-simulation workflow.
+- `rgbx/` and `intrinsic_edit/` are currently treated as local companion projects rather than content tracked by this repository.
