@@ -1,0 +1,11 @@
+torch
+torchvision
+numpy
+opencv-python>=4.7.0.72
+Pillow
+scikit-image
+huggingface_hub
+einops
+scipy
+filelock
+pyyaml

@@ -1,7 +1,55 @@
+# Local datasets and side projects
 dataset/
-__pycache__/
-*.py[cod]
-.ipynb_checkpoints/
-.DS_Store
 rgbx/
 intrinsic_edit/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Model and checkpoint artifacts
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.onnx
+*.safetensors
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Pipeline outputs and runtime caches
+pipelines/**/result/
+pipelines/**/results/
+pipelines/**/samples/
+pipelines/**/compare_png/
+pipelines/deepfill/generative_inpainting/model_logs/
+pipelines/deepfill/generative_inpainting/gate_analysis_results/
+pipelines/powerpaint/checkpoints/
+pipelines/anyline/models/

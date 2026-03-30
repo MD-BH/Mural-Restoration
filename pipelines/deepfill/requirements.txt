@@ -1,0 +1,11 @@
+# Core ML dependencies
+tensorflow<2.16
+# NeuralGym from source (must be installed via git link in requirements.txt or pip directly)
+git+https://github.com/JiahuiYu/neuralgym.git@master
+
+# Standard CV and data libs
+opencv-python
+PyYAML
+scipy
+numpy>=1.19.2
+tf-slim

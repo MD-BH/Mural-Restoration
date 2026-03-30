@@ -1,0 +1,14 @@
+[project]
+name = "gnn-deepfill"
+version = "0.1.0"
+description = "Generative Image Inpainting with Contextual Attention and Gated Convolution"
+readme = "README.md"
+requires-python = ">=3.7,<3.10"
+dependencies = [
+    "tensorflow<2",
+    "neuralgym @ git+https://github.com/JiahuiYu/neuralgym",
+    "opencv-python",
+    "PyYAML",
+    "scipy",
+    "numpy<1.19"
+]
